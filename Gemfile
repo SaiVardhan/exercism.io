@@ -5,6 +5,7 @@ ruby "2.1.5"
 gem 'activesupport', '~> 4.1.4'
 gem 'activerecord', '~> 4.1.4'
 
+gem 'github_api'
 gem 'bugsnag'
 gem 'faraday'
 gem 'loofah'
@@ -35,6 +36,7 @@ gem 'kss'
 
 group :test, :development do
   # gem 'ruby-prof', '~> 0.14'
+  gem 'pry'
   gem 'database_cleaner', require: false
   gem 'approvals', require: false
   gem 'rack-test', require: false

@@ -1,3 +1,4 @@
+#require 'github_api'
 class Submission < ActiveRecord::Base
   serialize :solution, JSON
   belongs_to :user
@@ -208,6 +209,21 @@ class Submission < ActiveRecord::Base
 
   def related
     @related ||= Submission.related(self)
+  end
+
+  def get_blob_url
+    # user.user_name
+    # user_exercise.slug
+    # commitid
+   # github = Github.new
+    trees = github.git_data.trees.get  'SaiVardhan', slug, commitid
+    trees.tree.first.url
+  end
+
+  def solution_blob
+    uri = URI(get_blob_url)
+    resp = JSON.parse(Net::HTTP.get(uri))
+    Base64.decode64(resp["content"])
   end
 
   private

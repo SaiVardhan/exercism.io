@@ -8,7 +8,7 @@ module ExercismWeb
       end
 
       get '/login' do
-        redirect Github.login_url(github_client_id)
+        redirect Github1.login_url(github_client_id)
       end
 
       get '/logout' do
