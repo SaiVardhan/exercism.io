@@ -28,6 +28,10 @@ class SubmissionTest < Minitest::Test
   def fred
     @fred ||= User.create(username: 'fred')
   end
+  
+  def sai
+   @sai ||= User.create(username: "SaiVardhan") 
+  end 
 
   def teardown
     super
@@ -216,5 +220,26 @@ class SubmissionTest < Minitest::Test
 
     expected = [commented_on_by_someone_else, not_commented_on_at_all].sort
     assert_equal expected, Submission.not_commented_on_by(user).sort
+  end
+  
+  ### Test Cases by Pramati ###
+  def test_blob_url
+    submission = Submission.create(state: 'pending', user: sai)
+    submission.slug = "gigasecond"
+    submission.commitid = "1ae84bd64a63c4ddcdec0ad0bda74984eb7ca3fb"
+    submission.save
+    #binding.pry
+    assert_equal(submission.get_blob_url,"https://api.github.com/repos/SaiVardhan/gigasecond/git/blobs/9d976df5b15d45e1cfed6dd680a99475e10a9b4c")
+  end 
+  
+  def test_blob_url_when_nil
+    submission = Submission.create(state: 'pending', user: sai)
+#    submission.slug = "gigasecond"
+    submission.commitid = "1ae84bd64a63c4ddcdec0ad0bda74984eb7ca3fb"
+    submission.save
+    raises_exception = -> { raise ArgumentError.new }
+    submission.stub :get_blob_url, raises_exception do
+      assert_raises(ArgumentError) { submission.get_blob_url }
+    end
   end
 end
