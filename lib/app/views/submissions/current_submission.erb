@@ -25,11 +25,7 @@
     </div>
 
     <div class="clearfix"></div>
-     <% if !submission.commitid.nil? %>
         <%= md(submission.solution_blob, submission.track_id) %>
-    <% else %>
-      <%= md(submission.solution.values.first, submission.track_id) %>
-    <% end %>
     <div id="submission-code" class="hidden">
       <%# if !submission.solution.blank? %>
       <%= h submission.solution.values.first %>

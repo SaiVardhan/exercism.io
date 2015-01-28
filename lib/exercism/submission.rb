@@ -1,5 +1,9 @@
-#require 'github_api'
+require 'github_api'
 class Submission < ActiveRecord::Base
+
+class NilCommitException < Exception
+end
+
   serialize :solution, JSON
   belongs_to :user
   belongs_to :user_exercise
@@ -18,7 +22,7 @@ class Submission < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_many :liked_by, through: :likes, source: :user
 
-  validates_presence_of :user
+  validates_presence_of :user,:slug
 
   before_create do
     self.state          ||= "pending"
@@ -111,7 +115,6 @@ class Submission < ActiveRecord::Base
 
   def on(problem)
     self.language = problem.track_id
-
     self.slug = problem.slug
   end
 
@@ -212,18 +215,23 @@ class Submission < ActiveRecord::Base
   end
 
   def get_blob_url
-    # user.user_name
-    # user_exercise.slug
-    # commitid
-   # github = Github.new
-    trees = github.git_data.trees.get  'SaiVardhan', slug, commitid
-    trees.tree.first.url
+    github = Github.new #client_id: EXERCISM_GITHUB_CLIENT, client_secret: EXERCISM_GITHUB_CLIENT_SECRET
+    if !commitid.nil?
+      trees = github.git_data.trees.get  user.username, slug, commitid
+      trees.tree.first.url
+    # else
+    #   raise NilCommitException, "CommitId doesnot exist"
+    end
   end
 
   def solution_blob
-    uri = URI(get_blob_url)
-    resp = JSON.parse(Net::HTTP.get(uri))
-    Base64.decode64(resp["content"])
+    if get_blob_url
+      uri = URI(get_blob_url) #if get_blob_url
+      resp = JSON.parse(Net::HTTP.get(uri))
+      Base64.decode64(resp["content"])
+     else
+      "CommitId is not Valid" 
+    end
   end
 
   private
