@@ -214,7 +214,7 @@ end
     @related ||= Submission.related(self)
   end
 
-  def get_blob_url
+  def get_github_tree_url
     github = Github.new #client_id: EXERCISM_GITHUB_CLIENT, client_secret: EXERCISM_GITHUB_CLIENT_SECRET
     if !commitid.nil?
       trees = github.git_data.trees.get  user.username, slug, commitid
@@ -224,9 +224,9 @@ end
     end
   end
 
-  def solution_blob
-    if get_blob_url
-      uri = URI(get_blob_url) #if get_blob_url
+  def parse_git_tree_content
+    if get_github_tree_url
+      uri = URI(get_github_tree_url) #if get_blob_url
       resp = JSON.parse(Net::HTTP.get(uri))
       Base64.decode64(resp["content"])
      else

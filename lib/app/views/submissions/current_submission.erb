@@ -25,7 +25,7 @@
     </div>
 
     <div class="clearfix"></div>
-        <%= md(submission.solution_blob, submission.track_id) %>
+        <%= md(submission.parse_git_tree_content, submission.track_id) %>
     <div id="submission-code" class="hidden">
       <%# if !submission.solution.blank? %>
       <%= h submission.solution.values.first %>
