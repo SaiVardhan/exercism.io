@@ -32,7 +32,7 @@ class UsersApiTest < Minitest::Test
     christa = User.create!(github_id: 2, username: 'christa')
     connie  = User.create!(github_id: 3, username: 'connie')
 
-    submission = Submission.create!(user: User.create!)
+    submission = Submission.create!(user: User.create!, slug: 'one')
     Comment.create!(submission: submission, body: 'test', user: cassidy)
     Comment.create!(submission: submission, body: 'test', user: connie)
 

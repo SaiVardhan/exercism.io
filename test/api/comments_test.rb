@@ -16,7 +16,7 @@ class CommentsApiTest < Minitest::Test
   def test_saves_comment_without_affecting_nit_count
     rikki = User.create(username: 'rikki-')
     user = User.create(username: 'alice')
-    submission = Submission.create(user: user)
+    submission = Submission.create(user: user, slug: 'one')
     Rikki.stub(:shared_key, 'ok') do
       post "/submissions/#{submission.key}/comments?shared_key=ok", {comment: 'a comment'}.to_json
     end
@@ -31,7 +31,7 @@ class CommentsApiTest < Minitest::Test
     alice = User.create(username: 'alice')
     bob = User.create(username: 'bob')
     rikki = User.create(username: 'rikki-')
-    submission = Submission.create(user: alice)
+    submission = Submission.create(user: alice, slug: 'one')
 
     submission.comments.create(user: alice, body: 'abc comment')
     submission.comments.create(user: rikki, body: 'prq comment')

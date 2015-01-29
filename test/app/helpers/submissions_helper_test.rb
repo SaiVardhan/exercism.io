@@ -8,7 +8,7 @@ class SubmissionsHelperTest < Minitest::Test
     super
     @alice      = User.new(username: 'alice', email: 'alice@example.com')
     @fred       = User.new(username: 'fred', email: 'fred@example.com')
-    @submission = Submission.create(user: @alice)
+    @submission = Submission.create(user: @alice, slug: 'one')
   end
 
   def helper

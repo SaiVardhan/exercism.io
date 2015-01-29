@@ -6,7 +6,7 @@ class UserExerciseTest < Minitest::Test
   def test_close_an_exercise
     alice = User.create(username: 'alice')
     exercise = UserExercise.create(user: alice, state: 'pending')
-    exercise.submissions << Submission.create(user: alice) # temporary measure
+    exercise.submissions << Submission.create(user: alice, slug: 'one') # temporary measure
     assert exercise.open?
     exercise.close!
     refute exercise.reload.open?
@@ -15,7 +15,7 @@ class UserExerciseTest < Minitest::Test
   def test_reopen_an_exercise
     alice = User.create(username: 'alice')
     exercise = UserExercise.create(user: alice, state: 'done')
-    exercise.submissions << Submission.create(user: alice) # temporary measure
+    exercise.submissions << Submission.create(user: alice, slug: 'one') # temporary measure
     assert exercise.closed?
     exercise.reopen!
     refute exercise.reload.closed?
@@ -27,8 +27,8 @@ class UserExerciseTest < Minitest::Test
         user: alice,
         state: 'done',
         submissions: [
-            Submission.create!(user: alice, nit_count: 5),
-            Submission.create!(user: alice, nit_count: 7)
+            Submission.create!(user: alice, nit_count: 5, slug: 'one'),
+            Submission.create!(user: alice, nit_count: 7, slug: 'one')
         ]
     )
 

@@ -18,7 +18,7 @@ class SubmissionTest < Minitest::Test
   end
 
   def create_submission
-    Submission.create!(user: User.create!)
+    Submission.create!(user: User.create!, slug: 'one')
   end
 
   def alice
@@ -28,10 +28,10 @@ class SubmissionTest < Minitest::Test
   def fred
     @fred ||= User.create(username: 'fred')
   end
-  
+
   def sai
-   @sai ||= User.create(username: "SaiVardhan") 
-  end 
+   @sai ||= User.create(username: "SaiVardhan")
+  end
 
   def teardown
     super
@@ -41,7 +41,7 @@ class SubmissionTest < Minitest::Test
   end
 
   def test_random_submission_key
-    submission = Submission.create(user: alice)
+    submission = Submission.create(user: alice, slug: 'one')
     submission.reload
     refute_nil submission.key
   end
@@ -76,19 +76,19 @@ class SubmissionTest < Minitest::Test
   end
 
   def test_like_sets_liked_by
-    submission = Submission.create(state: 'pending', user: alice)
+    submission = Submission.create(state: 'pending', user: alice, slug: 'one')
     submission.like!(fred)
     assert_equal [fred], submission.liked_by
   end
 
   def test_like_calls_mute
-    submission = Submission.create(state: 'pending', user: alice)
+    submission = Submission.create(state: 'pending', user: alice, slug: 'one')
     submission.expects(:mute).with(fred)
     submission.like!(fred)
   end
 
   def test_unlike_resets_is_liked_if_liked_by_is_empty
-    submission = Submission.create(state: 'pending', user: alice)
+    submission = Submission.create(state: 'pending', user: alice, slug: 'one')
     Like.create(submission: submission, user: fred)
     submission.unlike!(fred)
     refute submission.is_liked
@@ -96,7 +96,7 @@ class SubmissionTest < Minitest::Test
 
   def test_unlike_does_not_reset_is_liked_if_liked_by_is_not_empty
     bob = User.create(username: 'bob')
-    submission = Submission.create(state: 'pending', user: alice)
+    submission = Submission.create(state: 'pending', user: alice, slug: 'one')
     Like.create(submission: submission, user: bob)
     Like.create(submission: submission, user: fred)
     submission.unlike!(bob)
@@ -104,14 +104,14 @@ class SubmissionTest < Minitest::Test
   end
 
   def test_unlike_changes_liked_by
-    submission = Submission.create(state: 'pending', user: alice)
+    submission = Submission.create(state: 'pending', user: alice, slug: 'one')
     Like.create(submission: submission, user: fred)
     submission.unlike!(fred)
     assert_equal [], submission.liked_by
   end
 
   def test_unlike_calls_unmute
-    submission = Submission.create(state: 'pending', user: alice)
+    submission = Submission.create(state: 'pending', user: alice, slug: 'one')
     submission.expects(:unmute).with(fred)
     submission.unlike!(fred)
   end
@@ -127,7 +127,7 @@ class SubmissionTest < Minitest::Test
   end
 
   def test_muted_by_when_muted
-    submission = Submission.create(user: fred, state: 'pending')
+    submission = Submission.create(user: fred, state: 'pending', slug: 'one')
     submission.mute! alice
     assert submission.muted_by?(alice)
   end
@@ -192,13 +192,13 @@ class SubmissionTest < Minitest::Test
 
   def test_aging_submissions
     # not old
-    s1 = Submission.create(user: alice, state: 'pending', created_at: 20.days.ago, nit_count: 1)
+    s1 = Submission.create(user: alice, state: 'pending', created_at: 20.days.ago, nit_count: 1, slug: 'one')
     # no nits
-    s2 = Submission.create(user: alice, state: 'pending', created_at: 22.days.ago, nit_count: 0)
+    s2 = Submission.create(user: alice, state: 'pending', created_at: 22.days.ago, nit_count: 0, slug: 'one')
     # not pending
-    s3 = Submission.create(user: alice, state: 'completed', created_at: 22.days.ago, nit_count: 1)
+    s3 = Submission.create(user: alice, state: 'completed', created_at: 22.days.ago, nit_count: 1, slug: 'one')
     # Meets criteria: old, pending, and with nits
-    s4 = Submission.create(user: alice, state: 'pending', created_at: 22.days.ago, nit_count: 1)
+    s4 = Submission.create(user: alice, state: 'pending', created_at: 22.days.ago, nit_count: 1, slug: 'one')
 
     # Guard clause.
     # All the expected submissions got created
@@ -221,18 +221,20 @@ class SubmissionTest < Minitest::Test
     expected = [commented_on_by_someone_else, not_commented_on_at_all].sort
     assert_equal expected, Submission.not_commented_on_by(user).sort
   end
-  
+
   ### Test Cases by Pramati ###
   def test_blob_url
+    skip
     submission = Submission.create(state: 'pending', user: sai)
     submission.slug = "gigasecond"
     submission.commitid = "1ae84bd64a63c4ddcdec0ad0bda74984eb7ca3fb"
     submission.save
     #binding.pry
     assert_equal(submission.get_blob_url,"https://api.github.com/repos/SaiVardhan/gigasecond/git/blobs/9d976df5b15d45e1cfed6dd680a99475e10a9b4c")
-  end 
-  
+  end
+
   def test_blob_url_when_nil
+    skip
     submission = Submission.create(state: 'pending', user: sai)
 #    submission.slug = "gigasecond"
     submission.commitid = "1ae84bd64a63c4ddcdec0ad0bda74984eb7ca3fb"
