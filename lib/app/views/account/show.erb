@@ -139,7 +139,7 @@
             <input type="email" id="email" name="email" placeholder="Email" value="<%= current_user.email %>" class="form-control" />
             <select name="source_type" class="form-control">
                 <% Exercism::Config.source_types.each do |source| %>
-               <option <%= 'selected="selected"' if  source== current_user.source_type %> value="<%= source %>"><%= source %></option>
+                    <option <%= 'selected="selected"' if  source== current_user.source_type %> value="<%= source %>"><%= source %></option>
                 <% end %>
             </select>  
             <input type="submit" name="update" value="Update" class="btn btn-default" />
