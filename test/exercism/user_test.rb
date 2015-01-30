@@ -140,6 +140,19 @@ class UserTest < Minitest::Test
     %w{alice bob fred}.each do |name| User.create username: name end
     assert_equal ['alice', 'bob'], User.find_in_usernames(['ALICE', 'BOB']).map(&:username)
   end
+  
+  ###########PRAMTI CONTRIB##############
+  
+  def test_valid_user_source
+    user = User.new source_type: "DB"
+    assert user.valid?
+  end
+
+  def test_invalid_user_source_type
+    user = User.new source_type: "Bitbucket"
+    refute user.valid?
+  end
+  
 
   private
 

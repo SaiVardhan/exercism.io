@@ -9,7 +9,7 @@ class AccountTest < AcceptanceTestCase
   def test_account_page_exists
     with_login(@user) do
       click_on 'Account'
-
+     # binding.pry  
       assert_css 'h1', text: 'Account'
       assert_content 'Exercises'
     end
@@ -20,21 +20,24 @@ class AccountTest < AcceptanceTestCase
       click_on 'Account'
 
       fill_in 'email', with: 'some@email.com'
+      
       click_on 'Update'
-
+      
       assert_content 'Updated email address.'
       assert_equal 'some@email.com', find('[name=email]').value
     end
   end
 
   def test_creating_a_team
-    create_user(username: 'one_username', github_id: 12345)
-    create_user(username: 'two_username', github_id: 4567)
+    create_user(username: 'one_username', github_id: 12345,source_type: "DB")
+    create_user(username: 'two_username', github_id: 4567,source_type: "GIT")
 
     with_login(@user) do
       click_on 'Account'
+      require 'pry'
+     #  binding.pry
       click_on 'new team'
-
+      
       fill_in 'Slug', with: 'gocowboys'
       fill_in 'Name', with: 'Go Cowboys'
       fill_in 'Usernames', with: 'one_username, two_username'

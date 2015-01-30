@@ -10,8 +10,9 @@ class AcceptanceTestCase < Minitest::Test
   def with_login(user)
     Authentication.stub(:perform, user) do
       visit '/github/callback?code=something'
-
+ 
       yield
+     # binding.pry
     end
   end
 
