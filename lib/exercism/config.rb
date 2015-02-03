@@ -57,5 +57,9 @@ class Exercism
     def self.upcoming
       ['D', 'ECMAScript', 'Java', 'Rust', 'PHP'] - current
     end
+
+    def self.source_types
+        %w(DB GITHUB)
+    end
   end
 end

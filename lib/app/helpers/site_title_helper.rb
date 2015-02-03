@@ -6,10 +6,14 @@ module Sinatra
       @title ? "#{@title}" : "exercism.io"
     end
 
-    def account_source_options
+    # def source_types
+    #   %w(DB GITHUB)
+    # end
+  
+  
+  def account_source_options
       txt = ""
-
-      source_types.each do |source|
+      Exercism::Config.source_types.each do |source|
         if current_user.source_type == source
           txt << "<option selected value='#{source}'>#{source}</option>"
         else
@@ -18,10 +22,7 @@ module Sinatra
       end
 
       txt
-    end
+  end
 
-    def source_types
-      %w(DB GITHUB)
-    end
   end
 end
