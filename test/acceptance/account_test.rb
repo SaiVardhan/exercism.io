@@ -47,4 +47,31 @@ class AccountTest < AcceptanceTestCase
       assert_content 'two_username'
     end
   end
+  
+  
+  def test_changing_email_and_source_type
+     with_login(@user) do
+      click_on 'Account'
+
+      fill_in 'email', with: 'some@email.com'
+      select('GITHUB', :from => 'account[source_type]')
+      click_on 'Update'
+
+      assert_content 'Updated account settings.'
+      assert_equal 'some@email.com', find("[name='account[email]']").value
+      assert_equal 'GITHUB', find("[name='account[source_type]']").value
+    end
+  end
+  
+  def test_changing_source_type
+    with_login(@user) do
+      click_on 'Account'
+
+      select('GITHUB', :from => 'account[source_type]')
+      click_on 'Update'
+
+      assert_content 'Updated account settings.'
+      assert_equal 'GITHUB', find("[name='account[source_type]']").value
+   end 
+  end
 end
