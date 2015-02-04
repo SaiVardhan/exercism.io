@@ -15,7 +15,7 @@ gem 'pg'
 # http://stackoverflow.com/questions/14824179/typeerror-cannot-visit-mailmultibytechars
 gem 'pony', '~> 1.6', require: false
 gem 'pry', require: false
-gem 'puma'
+gem 'thin'
 gem 'rack-flash3', require: 'rack-flash'
 gem 'rake'
 gem 'redcarpet', '~> 3.1'
@@ -25,6 +25,7 @@ gem 'sinatra-contrib'
 gem 'sidekiq'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
+gem 'github_api'
 
 # Frontend Gems
 gem 'sass'

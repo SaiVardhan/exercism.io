@@ -35,7 +35,15 @@ module ExercismWeb
 
         title("%s by %s in %s" % [submission.problem.name, submission.user.username, submission.problem.language])
 
-        erb :"submissions/show", locals: {submission: submission, next_submission: next_submission, sharing: Sharing.new}
+        src_klass = submission.user.source_klass
+        src_obj = src_klass.new(submission)
+        data = {
+          submission: submission,
+          next_submission: next_submission,
+          sharing: Sharing.new,
+          solution: src_obj.solution
+        }
+        erb :"submissions/show", locals: data
       end
 
       post '/submissions/:key/like' do |key|
